@@ -3,10 +3,12 @@ package com.gridlayouttest;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
-import android.graphics.Color;
-import android.support.v7.app.AppCompatActivity;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.view.Gravity;
+import android.support.v7.app.AppCompatActivity;
+import android.text.method.HideReturnsTransformationMethod;
+import android.text.method.PasswordTransformationMethod;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -14,6 +16,8 @@ import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.GridLayout;
 import android.widget.TextView;
+
+import com.gridlayouttest.weight.PasswordEditText;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,7 +37,13 @@ public class MainActivity extends AppCompatActivity {
     private TextView tv;
     private EditText et;
 
-    private boolean isHidePwd = true;// 输入框密码是否是隐藏的，默认为true
+
+    //给眼睛设置图标
+    private Drawable[] drawables;
+    private int eyeWidth;
+    private Drawable drawableEyeOpen;
+
+    private PasswordEditText passwordEditText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,8 +61,46 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
+        drawables = et.getCompoundDrawables();
+        eyeWidth = drawables[2].getBounds().width();// 眼睛图标的宽度
+        drawableEyeOpen = getResources().getDrawable(R.drawable.ic_eyes_open);
+
+        drawableEyeOpen.setBounds(drawables[2].getBounds());//这一步不能省略
+
+         et.setOnTouchListener(eyesClickListener);
 
     }
+
+    View.OnTouchListener eyesClickListener = new View.OnTouchListener() {
+        private boolean isHidePwd = true;// 输入框密码是否是隐藏的，默认为true
+
+        @Override
+        public boolean onTouch(View v, MotionEvent event) {
+            if (event.getAction() == MotionEvent.ACTION_UP) {
+                // getWidth,getHeight必须在这里处理
+                float et_pwdMinX = v.getWidth() - eyeWidth - et.getPaddingRight();
+                float et_pwdMaxX = v.getWidth();
+                float et_pwdMinY = 0;
+                float et_pwdMaxY = v.getHeight();
+                float x = event.getX();
+                float y = event.getY();
+                if (x < et_pwdMaxX && x > et_pwdMinX && y > et_pwdMinY && y < et_pwdMaxY) {
+                    if (isHidePwd) {
+                        et.setCompoundDrawables(null, null, drawableEyeOpen, null);
+                        //隐藏密码
+                        et.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
+                        isHidePwd = false;
+                    } else {
+                        et.setCompoundDrawables(null, null, drawables[2], null);
+                        //显示密码
+                        et.setTransformationMethod(PasswordTransformationMethod.getInstance());
+                        isHidePwd = true;
+                    }
+                }
+            }
+            return false;
+        }
+    };
 
     private void initDialog() {
         GridLayout grild = new GridLayout(this);   //兴趣Layout
@@ -81,11 +129,11 @@ public class MainActivity extends AppCompatActivity {
         }
         interestDialog = new AlertDialog.Builder(this).setView(grild)
                 .setPositiveButton("确定", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                tv.setText(list.toString());
-            }
-        })
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        tv.setText(list.toString());
+                    }
+                })
                 //取消按钮
                 .setNegativeButton("取消", new DialogInterface.OnClickListener() {
                     @Override
