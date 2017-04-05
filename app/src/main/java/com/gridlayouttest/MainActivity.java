@@ -38,12 +38,6 @@ public class MainActivity extends AppCompatActivity {
     private EditText et;
 
 
-    //给眼睛设置图标
-    private Drawable[] drawables;
-    private int eyeWidth;
-    private Drawable drawableEyeOpen;
-
-    private PasswordEditText passwordEditText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,17 +55,10 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
-        drawables = et.getCompoundDrawables();
-        eyeWidth = drawables[2].getBounds().width();// 眼睛图标的宽度
-        drawableEyeOpen = getResources().getDrawable(R.drawable.ic_eyes_open);
-
-        drawableEyeOpen.setBounds(drawables[2].getBounds());//这一步不能省略
-
-         et.setOnTouchListener(eyesClickListener);
 
     }
 
-    View.OnTouchListener eyesClickListener = new View.OnTouchListener() {
+    /*View.OnTouchListener eyesClickListener = new View.OnTouchListener() {
         private boolean isHidePwd = true;// 输入框密码是否是隐藏的，默认为true
 
         @Override
@@ -100,7 +87,7 @@ public class MainActivity extends AppCompatActivity {
             }
             return false;
         }
-    };
+    };*/
 
     private void initDialog() {
         GridLayout grild = new GridLayout(this);   //兴趣Layout

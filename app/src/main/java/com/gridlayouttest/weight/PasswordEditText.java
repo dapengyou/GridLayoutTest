@@ -6,8 +6,6 @@ import android.text.method.HideReturnsTransformationMethod;
 import android.text.method.PasswordTransformationMethod;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
-import android.view.View;
-import android.widget.EditText;
 
 import com.gridlayouttest.R;
 
@@ -21,7 +19,7 @@ public class PasswordEditText extends android.support.v7.widget.AppCompatEditTex
     private int eyeWidth;
     private Drawable drawableEyeOpen;
     private Context mContext;
-
+    private boolean isHidePwd = true;// 输入框密码是否是隐藏的，默认为true
 
     public PasswordEditText(Context context) {
         super(context);
@@ -51,7 +49,7 @@ public class PasswordEditText extends android.support.v7.widget.AppCompatEditTex
 
 
     public boolean onTouchEvent(MotionEvent event) {
-        boolean isHidePwd = true;// 输入框密码是否是隐藏的，默认为true
+
         if (event.getAction() == MotionEvent.ACTION_UP) {
             // getWidth,getHeight必须在这里处理
             float et_pwdMinX = this.getWidth() - eyeWidth - this.getPaddingRight();
