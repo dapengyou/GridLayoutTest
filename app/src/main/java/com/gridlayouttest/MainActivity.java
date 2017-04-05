@@ -5,6 +5,7 @@ import android.app.Dialog;
 import android.content.DialogInterface;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.support.v7.app.AppCompatActivity;
 import android.text.method.HideReturnsTransformationMethod;
 import android.text.method.PasswordTransformationMethod;
@@ -16,6 +17,7 @@ import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.GridLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.gridlayouttest.weight.PasswordEditText;
 
@@ -36,7 +38,7 @@ public class MainActivity extends AppCompatActivity {
     private Dialog interestDialog;
     private TextView tv;
     private EditText et;
-
+    private Button captch;
 
 
     @Override
@@ -44,9 +46,12 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         initDialog();
+
         button = (Button) findViewById(R.id.bt_button);
         tv = (TextView) findViewById(R.id.text);
         et = (EditText) findViewById(R.id.et_pwd);
+        captch = (Button) findViewById(R.id.bt_captcha);
+
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -55,7 +60,30 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
+        captch.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                initCaptch();
+            }
+        });
 
+
+    }
+
+    private void initCaptch() {
+        CountDownTimer countDownTimer = new CountDownTimer(60000, 1000) {
+            @Override
+            public void onTick(long millisUntilFinished) {
+                captch.setText("获取验证码" + "(" + ((millisUntilFinished + 15) / 1000)
+                        + "秒)");
+            }
+
+            @Override
+            public void onFinish() {
+                captch.setText("获取验证码");
+                Toast.makeText(MainActivity.this, "获取验证码失败", Toast.LENGTH_SHORT).show();
+            }
+        }.start();
     }
 
     private void initDialog() {
