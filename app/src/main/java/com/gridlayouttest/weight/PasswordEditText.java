@@ -18,24 +18,20 @@ public class PasswordEditText extends android.support.v7.widget.AppCompatEditTex
     private Drawable[] drawables;
     private int eyeWidth;
     private Drawable drawableEyeOpen;
-    private Context mContext;
     private boolean isHidePwd = true;// 输入框密码是否是隐藏的，默认为true
 
     public PasswordEditText(Context context) {
         super(context);
-        mContext = context;
         init();
     }
 
     public PasswordEditText(Context context, AttributeSet attrs) {
         super(context, attrs);
-        mContext = context;
         init();
     }
 
     public PasswordEditText(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        mContext = context;
         init();
     }
 

@@ -58,37 +58,6 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    /*View.OnTouchListener eyesClickListener = new View.OnTouchListener() {
-        private boolean isHidePwd = true;// 输入框密码是否是隐藏的，默认为true
-
-        @Override
-        public boolean onTouch(View v, MotionEvent event) {
-            if (event.getAction() == MotionEvent.ACTION_UP) {
-                // getWidth,getHeight必须在这里处理
-                float et_pwdMinX = v.getWidth() - eyeWidth - et.getPaddingRight();
-                float et_pwdMaxX = v.getWidth();
-                float et_pwdMinY = 0;
-                float et_pwdMaxY = v.getHeight();
-                float x = event.getX();
-                float y = event.getY();
-                if (x < et_pwdMaxX && x > et_pwdMinX && y > et_pwdMinY && y < et_pwdMaxY) {
-                    if (isHidePwd) {
-                        et.setCompoundDrawables(null, null, drawableEyeOpen, null);
-                        //隐藏密码
-                        et.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
-                        isHidePwd = false;
-                    } else {
-                        et.setCompoundDrawables(null, null, drawables[2], null);
-                        //显示密码
-                        et.setTransformationMethod(PasswordTransformationMethod.getInstance());
-                        isHidePwd = true;
-                    }
-                }
-            }
-            return false;
-        }
-    };*/
-
     private void initDialog() {
         GridLayout grild = new GridLayout(this);   //兴趣Layout
         list = new ArrayList<>();
