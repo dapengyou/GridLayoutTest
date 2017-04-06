@@ -39,6 +39,39 @@
         android:layout_height="wrap_content"
         android:text="获取验证码"
         android:id="@+id/bt_captcha"/>
+    <LinearLayout
+        android:id="@+id/ly_sex"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
 
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="*"
+            android:textColor="@color/colorAccent"
+            android:textSize="20sp" />
+
+
+        <RadioGroup
+            android:id="@+id/rg_sex"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <RadioButton
+                android:id="@+id/rb_man"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="男性" />
+
+            <RadioButton
+                android:id="@+id/rb_woman"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="true"
+                android:text="女性" />
+        </RadioGroup>
+    </LinearLayout>
 
 </LinearLayout>

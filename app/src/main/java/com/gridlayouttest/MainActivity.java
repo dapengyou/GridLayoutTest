@@ -2,10 +2,12 @@ package com.gridlayouttest;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.support.annotation.IdRes;
 import android.support.v7.app.AppCompatActivity;
 import android.text.method.HideReturnsTransformationMethod;
 import android.text.method.PasswordTransformationMethod;
@@ -16,6 +18,8 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.GridLayout;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -41,6 +45,9 @@ public class MainActivity extends AppCompatActivity {
     private EditText et;
     private Button captch;
 
+    private RadioGroup mRgSex;      //性别
+    private RadioButton mRbSex;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,6 +60,10 @@ public class MainActivity extends AppCompatActivity {
         et = (EditText) findViewById(R.id.et_pwd);
         captch = (Button) findViewById(R.id.bt_captcha);
 
+        //性别
+        mRgSex = (RadioGroup) findViewById(R.id.rg_sex);
+
+
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -63,20 +74,30 @@ public class MainActivity extends AppCompatActivity {
         });
 
 
-
         captch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //initCaptch();
-                CountDownShowHelper cd = new CountDownShowHelper(captch,"获取验证码","%ds后重新发送");
+                CountDownShowHelper cd = new CountDownShowHelper(captch, "获取验证码", "%ds后重新发送");
                 cd.onFinish();
                 cd.start();
             }
         });
 
-
+        mRgSex.setOnCheckedChangeListener(sexCheckedListener);
 
     }
+
+    RadioGroup.OnCheckedChangeListener sexCheckedListener = new RadioGroup.OnCheckedChangeListener() {
+        @Override
+        public void onCheckedChanged(RadioGroup group, @IdRes int checkedId) {
+            //获取变更后的选中项的ID
+            int radioButtonId = group.getCheckedRadioButtonId();
+            mRbSex = (RadioButton) MainActivity.this.findViewById(radioButtonId);
+            //更新文本内容，以符合选中项
+            Toast.makeText(MainActivity.this, "您的性别是：" + mRbSex.getText(), Toast.LENGTH_SHORT).show();
+        }
+    };
+
 
     private void initCaptch() {
         CountDownTimer countDownTimer = new CountDownTimer(60000, 1000) {
