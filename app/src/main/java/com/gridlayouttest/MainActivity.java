@@ -19,6 +19,7 @@ import android.widget.GridLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.gridlayouttest.util.CountDownShowHelper;
 import com.gridlayouttest.weight.PasswordEditText;
 
 import java.util.ArrayList;
@@ -60,12 +61,19 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
+
+
+
         captch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                initCaptch();
+                //initCaptch();
+                CountDownShowHelper cd = new CountDownShowHelper(captch,"获取验证码","%ds后重新发送");
+                cd.onFinish();
+                cd.start();
             }
         });
+
 
 
     }
