@@ -1,16 +1,22 @@
 package com.gridlayouttest;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.annotation.IdRes;
 import android.support.v7.app.AppCompatActivity;
 import android.text.method.HideReturnsTransformationMethod;
 import android.text.method.PasswordTransformationMethod;
+import android.util.TypedValue;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
@@ -18,14 +24,24 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.GridLayout;
+import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.gridlayouttest.ui.PicassoImageLoader;
 import com.gridlayouttest.util.CountDownShowHelper;
 import com.gridlayouttest.weight.PasswordEditText;
+import com.lzy.imagepicker.ImagePicker;
+import com.lzy.imagepicker.bean.ImageItem;
+import com.lzy.imagepicker.loader.ImageLoader;
+import com.lzy.imagepicker.ui.ImageGridActivity;
+import com.lzy.imagepicker.view.CropImageView;
+import com.squareup.picasso.MemoryPolicy;
+import com.squareup.picasso.Picasso;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -48,21 +64,27 @@ public class MainActivity extends AppCompatActivity {
     private RadioGroup mRgSex;      //性别
     private RadioButton mRbSex;
 
+    private ImageView imageView;    //剪裁图像
+    private ImagePicker imagePicker;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         initDialog();
+        //imagePicker初始化
+        imagePicker = ImagePicker.getInstance();
+        imagePicker.setMultiMode(false);
 
         button = (Button) findViewById(R.id.bt_button);
         tv = (TextView) findViewById(R.id.text);
         et = (EditText) findViewById(R.id.et_pwd);
         captch = (Button) findViewById(R.id.bt_captcha);
+        imageView = (ImageView) findViewById(R.id.image);
 
         //性别
         mRgSex = (RadioGroup) findViewById(R.id.rg_sex);
-
 
         button.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -84,6 +106,8 @@ public class MainActivity extends AppCompatActivity {
         });
 
         mRgSex.setOnCheckedChangeListener(sexCheckedListener);
+        imageView.setOnClickListener(imageClickListener);
+
 
     }
 
@@ -98,6 +122,13 @@ public class MainActivity extends AppCompatActivity {
         }
     };
 
+    View.OnClickListener imageClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            Intent intent = new Intent(MainActivity.this, ImageGridActivity.class);
+            startActivityForResult(intent, 100);
+        }
+    };
 
     private void initCaptch() {
         CountDownTimer countDownTimer = new CountDownTimer(60000, 1000) {
@@ -154,6 +185,22 @@ public class MainActivity extends AppCompatActivity {
                         finish();
                     }
                 }).create();//创建对话框
+    }
+
+    //imagepicker回调
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == ImagePicker.RESULT_CODE_ITEMS) {
+            if (data != null && requestCode == 100) {
+                ArrayList<ImageItem> images = (ArrayList<ImageItem>) data.getSerializableExtra(ImagePicker.EXTRA_RESULT_ITEMS);
+                if (images != null && images.get(0) != null) {
+                    imagePicker.getImageLoader().displayImage(MainActivity.this, images.get(0).path, imageView, 200, 200);
+                }
+            } else {
+                Toast.makeText(this, "没有数据", Toast.LENGTH_SHORT).show();
+            }
+        }
     }
 
 }
