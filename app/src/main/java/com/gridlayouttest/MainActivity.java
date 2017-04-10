@@ -1,23 +1,14 @@
 package com.gridlayouttest;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.drawable.Drawable;
-import android.net.Uri;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.annotation.IdRes;
 import android.support.v7.app.AppCompatActivity;
-import android.text.method.HideReturnsTransformationMethod;
-import android.text.method.PasswordTransformationMethod;
-import android.util.TypedValue;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -30,22 +21,20 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.gridlayouttest.ui.PicassoImageLoader;
+import com.bigkoo.pickerview.TimePickerView;
+import com.bigkoo.pickerview.listener.CustomListener;
 import com.gridlayouttest.util.CountDownShowHelper;
-import com.gridlayouttest.weight.PasswordEditText;
 import com.lzy.imagepicker.ImagePicker;
 import com.lzy.imagepicker.bean.ImageItem;
-import com.lzy.imagepicker.loader.ImageLoader;
 import com.lzy.imagepicker.ui.ImageGridActivity;
-import com.lzy.imagepicker.view.CropImageView;
-import com.squareup.picasso.MemoryPolicy;
-import com.squareup.picasso.Picasso;
 
-import java.io.File;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements View.OnClickListener {
     private List<String> interestList = new ArrayList<String>() {{
         add("唱歌");
         add("看书");
@@ -67,12 +56,15 @@ public class MainActivity extends AppCompatActivity {
     private ImageView imageView;    //剪裁图像
     private ImagePicker imagePicker;
 
+    private TextView mTvDate;   //日期
+    private TimePickerView pickerView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         initDialog();
+        initTimePicker();
         //imagePicker初始化
         imagePicker = ImagePicker.getInstance();
         imagePicker.setMultiMode(false);
@@ -82,6 +74,7 @@ public class MainActivity extends AppCompatActivity {
         et = (EditText) findViewById(R.id.et_pwd);
         captch = (Button) findViewById(R.id.bt_captcha);
         imageView = (ImageView) findViewById(R.id.image);
+        mTvDate = (TextView) findViewById(R.id.textView);
 
         //性别
         mRgSex = (RadioGroup) findViewById(R.id.rg_sex);
@@ -108,6 +101,8 @@ public class MainActivity extends AppCompatActivity {
         mRgSex.setOnCheckedChangeListener(sexCheckedListener);
         imageView.setOnClickListener(imageClickListener);
 
+        mTvDate.setOnClickListener(this);
+
 
     }
 
@@ -129,6 +124,7 @@ public class MainActivity extends AppCompatActivity {
             startActivityForResult(intent, 100);
         }
     };
+
 
     private void initCaptch() {
         CountDownTimer countDownTimer = new CountDownTimer(60000, 1000) {
@@ -203,4 +199,48 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.textView:
+                if (pickerView != null) {
+                    pickerView.show();
+                }
+                break;
+        }
+    }
+
+    private void initTimePicker() {
+        //控制时间范围(如果不设置范围，则使用默认时间1900-2100年，此段代码可注释)
+        //因为系统Calendar的月份是从0-11的,所以如果是调用Calendar的set方法来设置时间,月份的范围也要是从0-11
+        Calendar selectedDate = Calendar.getInstance();
+        Calendar startDate = Calendar.getInstance();
+        Calendar endDate = Calendar.getInstance();
+        endDate.set(endDate.YEAR,endDate.MONTH,endDate.DATE);
+        //时间选择器
+        pickerView = new TimePickerView.Builder(this, new TimePickerView.OnTimeSelectListener() {
+            @Override
+            public void onTimeSelect(Date date, View v) {//选中事件回调
+                // 这里回调过来的v,就是show()方法里面所添加的 View 参数，如果show的时候没有添加参数，v则为null
+
+                /*btn_Time.setText(getTime(date));*/
+                mTvDate.setText(getTime(date));
+            }
+        })
+                .setType(TimePickerView.Type.YEAR_MONTH_DAY)
+                .setLabel("", "", "", "", "", "") //设置空字符串以隐藏单位提示   hide label
+                .setDividerColor(Color.DKGRAY)
+                .setContentSize(20)
+                .setDate(selectedDate)
+                .setRangDate(startDate, endDate)
+                .setCancelText("取消")
+                .setSubmitText("确定")
+                .build();
+    }
+
+
+    private String getTime(Date date) {//可根据需要自行截取数据显示
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        return format.format(date);
+    }
 }

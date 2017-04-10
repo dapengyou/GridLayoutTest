@@ -82,5 +82,10 @@
         android:id="@+id/image"
         android:src="@drawable/ic_avatar"
         />
-
+<TextView
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:id="@+id/textView"
+    android:hint="显示日期"
+    android:layout_marginTop="30dp"/>
 </LinearLayout>
