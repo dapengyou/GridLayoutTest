@@ -34,11 +34,13 @@
         android:drawableRight="@drawable/ic_eyes_close"
         android:inputType="textPassword"
         android:paddingRight="10dp" />
+
     <Button
+        android:id="@+id/bt_captcha"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="获取验证码"
-        android:id="@+id/bt_captcha"/>
+        android:text="获取验证码" />
+
     <LinearLayout
         android:id="@+id/ly_sex"
         android:layout_width="match_parent"
@@ -76,16 +78,35 @@
 
 
     <com.gridlayouttest.weight.CircleImageView
-        android:layout_marginTop="30dp"
+        android:id="@+id/image"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/image"
-        android:src="@drawable/ic_avatar"
-        />
-<TextView
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:id="@+id/textView"
-    android:hint="显示日期"
-    android:layout_marginTop="30dp"/>
+        android:layout_marginTop="30dp"
+        android:src="@drawable/ic_avatar" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            android:hint="显示日期" />
+
+        <TextView
+            android:id="@+id/tv_constellation"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="70dp"
+            android:layout_marginTop="30dp"
+            android:hint="星座" />
+    </LinearLayout>
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="RecycleView"
+        android:id="@+id/button"/>
 </LinearLayout>

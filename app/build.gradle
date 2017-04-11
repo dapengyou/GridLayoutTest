@@ -29,5 +29,6 @@ dependencies {
     compile 'com.lzy.widget:imagepicker:0.5.1'
     compile 'com.squareup.picasso:picasso:2.5.2'
     compile 'com.contrarywind:Android-PickerView:3.2.4'
+    compile 'com.lzy.widget:ninegridview:0.2.0'
     testCompile 'junit:junit:4.12'
 }

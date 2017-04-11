@@ -22,7 +22,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bigkoo.pickerview.TimePickerView;
-import com.bigkoo.pickerview.listener.CustomListener;
+import com.gridlayouttest.ui.RecycleViewActivity;
+import com.gridlayouttest.util.ConstellationUtil;
 import com.gridlayouttest.util.CountDownShowHelper;
 import com.lzy.imagepicker.ImagePicker;
 import com.lzy.imagepicker.bean.ImageItem;
@@ -49,6 +50,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private TextView tv;
     private EditText et;
     private Button captch;
+    private Button mBtRecycle;
 
     private RadioGroup mRgSex;      //性别
     private RadioButton mRbSex;
@@ -57,7 +59,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private ImagePicker imagePicker;
 
     private TextView mTvDate;   //日期
-    private TimePickerView pickerView;
+    private TextView mTvConstellation;  //星座
+
+    private TimePickerView pickerView;  //时间picker
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,6 +79,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         captch = (Button) findViewById(R.id.bt_captcha);
         imageView = (ImageView) findViewById(R.id.image);
         mTvDate = (TextView) findViewById(R.id.textView);
+        mTvConstellation = (TextView) findViewById(R.id.tv_constellation);
+        mBtRecycle = (Button) findViewById(R.id.button);
 
         //性别
         mRgSex = (RadioGroup) findViewById(R.id.rg_sex);
@@ -102,7 +108,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         imageView.setOnClickListener(imageClickListener);
 
         mTvDate.setOnClickListener(this);
-
+        mTvConstellation.setOnClickListener(this);
+        mBtRecycle.setOnClickListener(this);
 
     }
 
@@ -207,6 +214,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     pickerView.show();
                 }
                 break;
+            case R.id.button:
+                Intent intent = new Intent(this, RecycleViewActivity.class);
+                startActivity(intent);
+                break;
         }
     }
 
@@ -216,15 +227,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         Calendar selectedDate = Calendar.getInstance();
         Calendar startDate = Calendar.getInstance();
         Calendar endDate = Calendar.getInstance();
-        endDate.set(endDate.YEAR,endDate.MONTH,endDate.DATE);
+        endDate.set(endDate.YEAR, endDate.MONTH, endDate.DATE);
         //时间选择器
         pickerView = new TimePickerView.Builder(this, new TimePickerView.OnTimeSelectListener() {
             @Override
             public void onTimeSelect(Date date, View v) {//选中事件回调
                 // 这里回调过来的v,就是show()方法里面所添加的 View 参数，如果show的时候没有添加参数，v则为null
-
-                /*btn_Time.setText(getTime(date));*/
                 mTvDate.setText(getTime(date));
+                int month = getMonth(date);
+                int day = getDay(date);
+                mTvConstellation.setText(ConstellationUtil.getConstellation(month,day));
             }
         })
                 .setType(TimePickerView.Type.YEAR_MONTH_DAY)
@@ -238,9 +250,27 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 .build();
     }
 
+    private int getDay(Date date) {
+        SimpleDateFormat format = new SimpleDateFormat("MM");
+        String dayString = format.format(date);
+        int dayInteger = Integer.parseInt(dayString);
+//        Log.d("month",monthInteger+"");
+        return dayInteger;
+    }
+
+    private int getMonth(Date date) {
+        SimpleDateFormat format = new SimpleDateFormat("MM");
+       String monthString = format.format(date);
+        int monthInteger = Integer.parseInt(monthString);
+//        Log.d("month",monthInteger+"");
+        return monthInteger;
+    }
+
 
     private String getTime(Date date) {//可根据需要自行截取数据显示
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
         return format.format(date);
     }
+
+
 }

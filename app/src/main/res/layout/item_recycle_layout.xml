@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/setting_backgroud"
+    android:orientation="horizontal">
+    <com.gridlayouttest.weight.CircleImageView
+        android:id="@+id/id_image"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:src="@drawable/ic_avatar" />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/tv_nickname"
+        android:layout_marginTop="20dp"
+        android:layout_marginLeft="30dp"
+        android:text="用户昵称"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/tv_time"
+        android:layout_marginTop="20dp"
+        android:layout_marginLeft="90dp"
+        android:text="访问时间"
+        />
+
+</LinearLayout>
