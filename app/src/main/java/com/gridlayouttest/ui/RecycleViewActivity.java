@@ -3,16 +3,15 @@ package com.gridlayouttest.ui;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.view.View;
-import android.widget.Toast;
 
 import com.gridlayouttest.MainActivity;
 import com.gridlayouttest.R;
-import com.gridlayouttest.model.Vistitor;
 import com.gridlayouttest.ui.adapter.VisitorAdapter;
+import com.jcodecraeer.xrecyclerview.XRecyclerView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,10 +21,13 @@ import java.util.List;
  */
 
 public class RecycleViewActivity extends Activity implements VisitorAdapter.OnRecyclerViewListener {
-    private RecyclerView recyclerView;
+    //private RecyclerView recyclerView;
     //private List<Vistitor> mList;
-    private List<String> mList =new ArrayList<String>();
+    private XRecyclerView recyclerView;
+    private List<String> mList = new ArrayList<String>();
     private VisitorAdapter mAdapter;
+    private int refreshTime = 0;
+    private int time = 0;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -36,23 +38,64 @@ public class RecycleViewActivity extends Activity implements VisitorAdapter.OnRe
     }
 
     private void initData() {
-        for (int i = 0; i <= 20; i++) {
-            mList.add(""+i);
+        for (int i = 0; i < 30; i++) {
+            mList.add("" + i);
         }
     }
 
     private void initView() {
-        recyclerView = (RecyclerView) findViewById(R.id.id_recycle);
-        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
+        recyclerView = (XRecyclerView) findViewById(R.id.id_recycle);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
+        layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         recyclerView.setLayoutManager(layoutManager);
         mAdapter = new VisitorAdapter(this, mList);
         recyclerView.setAdapter(mAdapter);
         mAdapter.setOnRecyclerViewListener(this);
+        recyclerView.setLoadingListener(new XRecyclerView.LoadingListener() {
+            @Override
+            public void onRefresh() {
+                //refresh data here
+                refreshTime++;
+                time = 0;
+                new Handler().postDelayed(new Runnable() {
+                    public void run() {
+                        mList.clear();
+                        initData();
+                        mAdapter.notifyDataSetChanged();
+                        recyclerView.refreshComplete();
+                    }
+
+                }, 1000);
+            }
+
+            @Override
+            public void onLoadMore() {
+                // load more data here
+                if (time < 2) {
+                    new Handler().postDelayed(new Runnable() {
+                        public void run() {
+                            initData();
+                            recyclerView.loadMoreComplete();
+                            mAdapter.notifyDataSetChanged();
+                        }
+                    }, 1000);
+                } else {
+                    new Handler().postDelayed(new Runnable() {
+                        public void run() {
+                            initData();
+                            recyclerView.setNoMore(true);
+                            mAdapter.notifyDataSetChanged();
+                        }
+                    }, 1000);
+                }
+                time++;
+
+            }
+        });
     }
 
     @Override
     public void onItemClick(View view, int position) {
-        //Toast.makeText(this,"被点击"+position,Toast.LENGTH_SHORT).show();
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
     }

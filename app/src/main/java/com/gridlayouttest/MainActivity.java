@@ -23,6 +23,7 @@ import android.widget.Toast;
 
 import com.bigkoo.pickerview.TimePickerView;
 import com.gridlayouttest.ui.RecycleViewActivity;
+import com.gridlayouttest.ui.RobActivity;
 import com.gridlayouttest.util.ConstellationUtil;
 import com.gridlayouttest.util.CountDownShowHelper;
 import com.lzy.imagepicker.ImagePicker;
@@ -60,6 +61,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private TextView mTvDate;   //日期
     private TextView mTvConstellation;  //星座
+    private Button mBtRob;  //抢寐友
 
     private TimePickerView pickerView;  //时间picker
 
@@ -81,6 +83,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mTvDate = (TextView) findViewById(R.id.textView);
         mTvConstellation = (TextView) findViewById(R.id.tv_constellation);
         mBtRecycle = (Button) findViewById(R.id.button);
+        mBtRob = (Button) findViewById(R.id.rob);
 
         //性别
         mRgSex = (RadioGroup) findViewById(R.id.rg_sex);
@@ -110,6 +113,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mTvDate.setOnClickListener(this);
         mTvConstellation.setOnClickListener(this);
         mBtRecycle.setOnClickListener(this);
+        mBtRob.setOnClickListener(this);
 
     }
 
@@ -217,6 +221,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.button:
                 Intent intent = new Intent(this, RecycleViewActivity.class);
                 startActivity(intent);
+                break;
+            case R.id.rob:
+                Intent intentRob = new Intent(this, RobActivity.class);
+                startActivity(intentRob);
                 break;
         }
     }

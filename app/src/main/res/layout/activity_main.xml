@@ -109,4 +109,9 @@
         android:layout_height="wrap_content"
         android:text="RecycleView"
         android:id="@+id/button"/>
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/rob"
+        android:text="抢寐友"/>
 </LinearLayout>
