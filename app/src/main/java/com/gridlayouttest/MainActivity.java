@@ -23,9 +23,9 @@ import android.widget.Toast;
 
 import com.bigkoo.pickerview.TimePickerView;
 import com.gridlayouttest.ui.RecycleViewActivity;
-import com.gridlayouttest.ui.RobActivity;
 import com.gridlayouttest.util.ConstellationUtil;
 import com.gridlayouttest.util.CountDownShowHelper;
+import com.gridlayouttest.util.GlideUtil;
 import com.lzy.imagepicker.ImagePicker;
 import com.lzy.imagepicker.bean.ImageItem;
 import com.lzy.imagepicker.ui.ImageGridActivity;
@@ -202,7 +202,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             if (data != null && requestCode == 100) {
                 ArrayList<ImageItem> images = (ArrayList<ImageItem>) data.getSerializableExtra(ImagePicker.EXTRA_RESULT_ITEMS);
                 if (images != null && images.get(0) != null) {
-                    imagePicker.getImageLoader().displayImage(MainActivity.this, images.get(0).path, imageView, 200, 200);
+                    //imagePicker.getImageLoader().displayImage(MainActivity.this, images.get(0).path, imageView, 200, 200);
+                    GlideUtil.loadHeaderImage(images.get(0).path,this,imageView);
                 }
             } else {
                 Toast.makeText(this, "没有数据", Toast.LENGTH_SHORT).show();
@@ -223,8 +224,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 startActivity(intent);
                 break;
             case R.id.rob:
-                Intent intentRob = new Intent(this, RobActivity.class);
-                startActivity(intentRob);
+
                 break;
         }
     }
