@@ -9,7 +9,11 @@ import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.annotation.IdRes;
 import android.support.v7.app.AppCompatActivity;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
@@ -23,6 +27,7 @@ import android.widget.Toast;
 
 import com.bigkoo.pickerview.TimePickerView;
 import com.gridlayouttest.ui.RecycleViewActivity;
+import com.gridlayouttest.ui.TitlePageActivity;
 import com.gridlayouttest.util.ConstellationUtil;
 import com.gridlayouttest.util.CountDownShowHelper;
 import com.gridlayouttest.util.GlideUtil;
@@ -61,9 +66,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private TextView mTvDate;   //日期
     private TextView mTvConstellation;  //星座
-    private Button mBtRob;  //抢寐友
+    private TextView mBtBottom;  //底部弹框
 
     private TimePickerView pickerView;  //时间picker
+
+    private Button mButton;//titlePager
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,8 +91,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mTvDate = (TextView) findViewById(R.id.textView);
         mTvConstellation = (TextView) findViewById(R.id.tv_constellation);
         mBtRecycle = (Button) findViewById(R.id.button);
-        mBtRob = (Button) findViewById(R.id.rob);
-
+        mBtBottom = (TextView) findViewById(R.id.bottom);
+        mButton = (Button) findViewById(R.id.titlepager);
         //性别
         mRgSex = (RadioGroup) findViewById(R.id.rg_sex);
 
@@ -113,7 +121,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mTvDate.setOnClickListener(this);
         mTvConstellation.setOnClickListener(this);
         mBtRecycle.setOnClickListener(this);
-        mBtRob.setOnClickListener(this);
+        mBtBottom.setOnClickListener(this);
+        mButton.setOnClickListener(this);
 
     }
 
@@ -203,7 +212,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 ArrayList<ImageItem> images = (ArrayList<ImageItem>) data.getSerializableExtra(ImagePicker.EXTRA_RESULT_ITEMS);
                 if (images != null && images.get(0) != null) {
                     //imagePicker.getImageLoader().displayImage(MainActivity.this, images.get(0).path, imageView, 200, 200);
-                    GlideUtil.loadHeaderImage(images.get(0).path,this,imageView);
+                    GlideUtil.loadHeaderImage(images.get(0).path, this, imageView);
                 }
             } else {
                 Toast.makeText(this, "没有数据", Toast.LENGTH_SHORT).show();
@@ -223,10 +232,36 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 Intent intent = new Intent(this, RecycleViewActivity.class);
                 startActivity(intent);
                 break;
-            case R.id.rob:
-
+            case R.id.bottom:
+                show();
+                break;
+            case R.id.titlepager:
+                startActivity(new Intent(this,TitlePageActivity.class));
                 break;
         }
+    }
+
+    private void show() {
+        Dialog myDialog = new Dialog(this, R.style.BottomDialogStyle);
+        //填充对话框的布局
+        View view = LayoutInflater.from(this).inflate(R.layout.dialog_bottom, null);
+        //初始化控件
+        TextView fromAlbum = (TextView) view.findViewById(R.id.from_album_text);
+        TextView fromSystem = (TextView) view.findViewById(R.id.from_system_text);
+        fromAlbum.setOnClickListener(MainActivity.this);
+        fromSystem.setOnClickListener(this);
+        //将布局设置给Dialog
+        myDialog.setContentView(view);
+        //获取当前Activity所在的窗体
+        Window dialogWindow = myDialog.getWindow();
+        //设置Dialog从窗体底部弹出
+        dialogWindow.setGravity(Gravity.BOTTOM);
+        //获得窗体的属性
+        WindowManager.LayoutParams lp = dialogWindow.getAttributes();
+        lp.width = (int) (getWindowManager().getDefaultDisplay().getWidth() * 0.95);
+        lp.y = 20; //设置Dialog距离底部的距离
+        dialogWindow.setAttributes(lp); //将属性设置给窗体
+        myDialog.show();//显示对话框
     }
 
     private void initTimePicker() {
@@ -244,7 +279,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 mTvDate.setText(getTime(date));
                 int month = getMonth(date);
                 int day = getDay(date);
-                mTvConstellation.setText(ConstellationUtil.getConstellation(month,day));
+                mTvConstellation.setText(ConstellationUtil.getConstellation(month, day));
             }
         })
                 .setType(TimePickerView.Type.YEAR_MONTH_DAY)
@@ -268,7 +303,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private int getMonth(Date date) {
         SimpleDateFormat format = new SimpleDateFormat("MM");
-       String monthString = format.format(date);
+        String monthString = format.format(date);
         int monthInteger = Integer.parseInt(monthString);
 //        Log.d("month",monthInteger+"");
         return monthInteger;

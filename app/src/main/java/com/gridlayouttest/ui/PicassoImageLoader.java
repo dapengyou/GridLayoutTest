@@ -1,7 +1,6 @@
 package com.gridlayouttest.ui;
 
 import android.app.Activity;
-import android.graphics.Bitmap;
 import android.net.Uri;
 import android.widget.ImageView;
 

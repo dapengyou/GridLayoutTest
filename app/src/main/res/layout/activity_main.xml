@@ -104,14 +104,21 @@
             android:layout_marginTop="30dp"
             android:hint="星座" />
     </LinearLayout>
+
     <Button
+        android:id="@+id/button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="RecycleView"
-        android:id="@+id/button"/>
-    <Button
+        android:text="RecycleView" />
+
+    <TextView
+        android:id="@+id/bottom"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/rob"
-        android:text="抢寐友"/>
+        android:text="底部弹框" />
+    <Button
+        android:id="@+id/titlepager"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="titlepager"/>
 </LinearLayout>
